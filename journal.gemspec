@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'logger/version'
+require 'journal/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'logger'
-  spec.version       = Logger::VERSION
+  spec.name          = 'journal'
+  spec.version       = Journal::VERSION
   spec.authors       = ['Juan D Frias']
   spec.email         = ['juandfrias@gmail.com']
 
-  spec.summary       = 'Simple logger'
-  spec.homepage      = 'https://github.com/hawkprime/ruby-logger'
+  spec.summary       = 'Yet another ruby logger class'
+  spec.homepage      = 'https://github.com/hawkprime/ruby-journal'
   spec.license       = 'MIT'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
