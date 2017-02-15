@@ -1,4 +1,4 @@
-require 'logger/version'
+require 'journal/version'
 require 'date'
 require 'yaml'
 
