@@ -1,15 +1,120 @@
 # Logger
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/logger`. To experiment with that code, run `bin/console` for an interactive prompt.
+Yet another logger class.
 
-TODO: Delete this and the text above, and describe your gem
+## Usage
+
+Logger Class
+
+Logging Example:
+
+```ruby
+  log = HawkPrime::Logger[self.class]
+  log.debug('before change')
+```
+
+Output logging with one or multiple appenders
+
+```ruby
+  HawkPrime::Logger.add_appender HawkPrime::Logger::ConsoleAppender.new 'con', :info
+  HawkPrime::Logger.add_appender HawkPrime::Logger::FileAppender.new 'file', 'a.log', :debug
+```
+
+Use custom formatter for appender
+
+```ruby
+  con = HawkPrime::Logger::ConsoleAppender.new
+  con.formatter = MyFormatter.new
+```
+
+Custom formatter must define the following method:
+
+```ruby
+  def format(logger_name, level, message)
+```
+
+Control output
+
+```ruby
+  # Set level default level (root level)
+  Logger.level = :warn
+
+  # Only output info and higher for specifc logger
+  log.level = :info
+
+  # Only output warn or higher for specifc appender
+  con.level = :warn
+```
+
+Message level filtering follows this path:
+
+```ruby
+  root level => logger level => appender level
+```
+
+That is if root is set to info, nothing lower than info
+is sent down to the logger or appenders. Like wise if a
+specific logger is set to warn, nothing lower will be
+sent to the appenders.
+
+## Configuration
+
+Configure loggers/appenders based on config file
+
+```ruby
+  HawkPrime::Logger.config 'config.yml'
+```
+
+Sample config file:
+
+```yaml
+  appenders:
+    # For console type only name is required
+    -
+      name: console
+      type: console
+      formatter: TestFormatter
+      level: info
+      fd: STDERR
+
+    # For file type only name and file are required
+    # relative paths are relative to config file dir
+    -
+      name: file
+      type: file
+      file: app.log
+      level: debug
+      truncate: true
+      formatter: TestFormatter
+
+  loggers:
+    root: trace
+    App.LoggingController: debug
+    'test_passing(LoggerTest)': trace
+```
+
+
+To automatically search for a config file use:
+
+```ruby
+  HawkPrime::Logger.auto_config
+```
+
+This will search the following and load the first one found:
+
+```ruby
+  "config/logger.#{ENV['RACK_ENV']}.yml"
+  "config/logger.yml"
+  "./logger.#{ENV['RACK_ENV']}.yml"
+  "./logger.yml"
+```
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'logger'
+gem 'logger', :git => 'https://github.com/hawkprime/ruby-logger.git'
 ```
 
 And then execute:
@@ -19,23 +124,3 @@ And then execute:
 Or install it yourself as:
 
     $ gem install logger
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/logger.
-
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
