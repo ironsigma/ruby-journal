@@ -1,14 +1,14 @@
-# Logger
+# Journal
 
-Yet another logger class.
+Yet another ruby logger class.
 
 ## Usage
 
-Logger Class
-
-Logging Example:
+Logging example:
 
 ```ruby
+  require 'journal'
+
   log = HawkPrime::Logger[self.class]
   log.debug('before change')
 ```
@@ -114,7 +114,7 @@ This will search the following and load the first one found:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'logger', :git => 'https://github.com/hawkprime/ruby-logger.git'
+gem 'journal', :git => 'https://github.com/hawkprime/ruby-journal.git'
 ```
 
 And then execute:
@@ -123,10 +123,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install logger
+    $ gem install journal
 
 ## Release Notes
 
 ### 1.0.0
 
 * Initial version
+
+### 2.0.0
+
+* Name change to avoid collisions
