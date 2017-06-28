@@ -134,3 +134,7 @@ Or install it yourself as:
 ### 2.0.0
 
 * Name change to avoid collisions
+
+### 2.1.0
+
+* Added Rack::CommonLogger support
