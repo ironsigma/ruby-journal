@@ -157,6 +157,12 @@ module HawkPrime
       end
     end
 
+    def self.write(message)
+      @@appenders.each_value do |appender|
+        appender.log('App Root', :info, message)
+      end
+    end
+
     def trace(message)
       log :trace, message
     end
@@ -258,7 +264,11 @@ module HawkPrime
       def log(logger, msg_level, message)
         return unless Logger.loggable msg_level, @level
         # If appender level set, check it otherwise use root level
-        @fd.puts @formatter.format(logger, msg_level, message)
+        write @formatter.format(logger, msg_level, message)
+      end
+
+      def write(message)
+        @fd.puts message
       end
     end
 
@@ -277,6 +287,13 @@ module HawkPrime
       def initialize(name, file, level = nil, truncate = false, formatter = nil)
         super(name, level, formatter)
         @fd = File.open(file, truncate ? 'w' : 'a')
+        @fd.sync = true
+      end
+
+      def write(message)
+        @fd.flock(File::LOCK_EX)
+        @fd.puts message
+        @fd.flock(File::LOCK_UN)
       end
     end
 
